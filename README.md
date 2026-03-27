@@ -1,71 +1,85 @@
-# tab-manager README
 
-This is the README for your extension "tab-manager". After writing up a brief description, we recommend including the following sections.
+# Tab Manager Pro
 
-## Features
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+A VS Code extension that keeps your editor clean by enforcing a maximum number of open tabs per group and automatically closing the least recently used ones.
 
 ---
 
-## Following extension guidelines
+## Features
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+### Automatic Tab Limiting
+Set a maximum number of open tabs per editor group. When you open a new tab that exceeds the limit, the oldest (least recently used) tab is automatically closed — no manual cleanup needed.
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+### Per-Group Enforcement
+The limit applies independently to each editor group. If you have a split editor layout, each side maintains its own tab count.
 
-## Working with Markdown
+### Most Recently Used (MRU) Ordering
+Tabs are tracked by recency. The tab you used least recently is always the one that gets closed — your active work stays open.
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+### Pinned Tab Protection
+Pinned tabs are never auto-closed, regardless of the limit. Pin any file you want to keep permanently open.
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+### Live Status Bar Counter
+A status bar item shows your current tab count per group at a glance:
 
-## For more information
+```
+[ 2, 3 | max: 5 ]
+```
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+Left side shows tab counts per group (comma-separated). Right side shows your configured max.
 
-**Enjoy!**
+### Configurable Limit
+Change your max tab count anytime in VS Code settings — takes effect immediately without restarting.
+
+---
+
+## Extension Settings
+
+This extension contributes the following settings:
+
+| Setting | Type | Default | Description |
+|---|---|---|---|
+| `tabManager.maxTabs` | `number` | `3` | Maximum number of tabs allowed open per editor group |
+
+### How to configure
+
+Open your VS Code settings (`Ctrl+,` / `Cmd+,`) and search for **Tab Manager**, or add it directly to your `settings.json`:
+
+```json
+{
+  "tabManager.maxTabs": 5
+}
+```
+
+---
+
+## How It Works
+
+1. Open a new file — it gets tracked as the most recently used tab in its group.
+2. Switch between tabs — the MRU order updates automatically.
+3. If the tab count in any group exceeds `maxTabs`, the least recently used tab in that group is closed automatically.
+4. Pinned tabs are exempt from auto-closing.
+5. The status bar updates in real time to reflect the current state of each group.
+
+---
+
+## Tips
+
+- **Pin files you always want open** (right-click a tab → Pin) — they'll never be auto-closed.
+- **Use split editor groups** for different contexts (e.g. source vs. tests). Each group gets its own limit.
+- **Set a lower limit** (e.g. `2` or `3`) if you want to stay really focused.
+
+---
+
+## Known Issues
+
+- Non-text tabs (diff editors, settings UI, extension pages) are not tracked in the MRU stack and will not be auto-closed.
+- If all tabs in a group are pinned and the limit is exceeded, no tab will be closed.
+
+---
+
+## Release Notes
+
+### 0.0.1
+
+Initial release — MRU tab tracking, per-group enforcement, pinned tab exemption, status bar indicator, and configurable max tab limit.
