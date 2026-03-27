@@ -14,10 +14,21 @@
   "contributes": {
     "commands": [
       {
-        "command": "tab-manager.helloWorld",
-        "title": "Hello World"
+        "command": "tab-manager.tabManager",
+        "title": "Start Tab Manager"
       }
-    ]
+    ],
+    "configuration":{
+      "title": "Settings Tab Manager",
+      "type": "object",
+      "properties": {
+        "tabManager.maxTabs" : {
+          "type": "number",
+          "default": 3,
+          "description": "Number of tabs allowed to open at once"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
